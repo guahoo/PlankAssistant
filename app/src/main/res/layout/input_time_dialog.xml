@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/dialog_layout_full">
+
+
+    <RelativeLayout
+        android:id="@+id/dialog_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:background="#221B19"
+        android:orientation="vertical"
+        android:paddingBottom="30dp"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp"
+        android:paddingTop="20dp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/beginningTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="НАЧАЛЬНОЕ ВРЕМЯ ТРЕНИРОВКИ"
+                android:textColor="@color/colorOrange"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/timer_piker_beginningTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <NumberPicker
+                    android:id="@+id/numberPicker"
+                    android:theme="@style/AppTheme.Picker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    android:textColor="@color/colorOrange"
+                    android:layout_gravity="center_horizontal"
+                    android:width="100dp"
+                    android:orientation="vertical" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text=":"
+                    android:textColor="@color/colorOrange"
+                    android:textStyle="bold" />
+
+                <NumberPicker
+                    android:id="@+id/numberPicker2"
+                    android:theme="@style/AppTheme.Picker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    android:textColor="@color/colorOrange"
+                    android:layout_gravity="center_horizontal"
+                    android:width="100dp"
+                    android:orientation="vertical"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/magneticLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:text="ДОБАВЛЯЕМОЕ ВРЕМЯ"
+                android:textColor="@color/colorOrange"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/timer_piker_additionalTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <NumberPicker
+                    android:id="@+id/numberPicker3"
+                    android:theme="@style/AppTheme.Picker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    android:textColor="@color/colorOrange"
+                    android:layout_gravity="center_horizontal"
+                    android:width="100dp"
+                    android:orientation="vertical" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text=":"
+                    android:textColor="@color/colorOrange"
+                    android:textStyle="bold" />
+
+                <NumberPicker
+                    android:id="@+id/numberPicker4"
+                    android:theme="@style/AppTheme.Picker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    android:textColor="@color/colorOrange"
+                    android:layout_gravity="center_horizontal"
+                    android:width="100dp"
+                    android:orientation="vertical"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/ok_Btn"
+                android:layout_width="100dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="25dp"
+                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:focusable="true"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/ic_ok_button"
+                tools:ignore="VectorDrawableCompat" />
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#221B19"
+
+    tools:context="com.PlankAssistant.LibraryActivity"
+    tools:showIn="@layout/activity_library">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:paddingTop="4dp"
+        android:paddingBottom="6dp"
+        android:background="@android:color/black">
+
+
+        <TextView
+            android:id="@+id/colTrainingDay"
+            android:layout_width="70dp"
+            android:layout_height="55dp"
+            android:gravity="center_vertical"
+            android:layout_marginStart="15dp"
+            android:textStyle="bold"
+
+
+            android:text="1"
+            android:textColor="@color/colorOrange"
+            android:textSize="20sp" />
+        <TextView
+            android:id="@+id/colDate"
+            android:layout_width="0dp"
+            android:text="01.01.2020"
+            android:layout_height="55dp"
+            android:gravity="start|center_vertical"
+            android:textStyle="bold"
+            android:paddingStart="15dp"
+            android:layout_weight="1"
+            android:textColor="@color/colorOrange"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/colTimeResult"
+            android:layout_width="wrap_content"
+            android:text="32.2121"
+            android:layout_height="55dp"
+            android:layout_weight="0.7"
+            android:paddingStart="5dp"
+            android:gravity="start|center_vertical"
+            android:textStyle="bold"
+            android:textColor="@color/colorOrange"
+            android:textSize="20sp" />
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>

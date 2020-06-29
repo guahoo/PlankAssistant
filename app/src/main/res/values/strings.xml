@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Plank Assistant</string>
+    <string name="current_trainingDay">25 день тренировки</string>
+    <string name="completed">Отличная работа!</string>
+    <string name="nocompleted">"У тебя все получится! Программа автоматически скорректирована"</string>
+    <string name="emptyListView">У вас пока нет результатов.</string>
+    <string name="Error">Error</string>
+    <string name="DayString">%d день</string>
+    <string name="tommorow">Завтра: %s</string>
+    <string name="today">Сегодня: %s</string>
+    <string name="treningtimenotification">НАПОМИНАЮ ПРО ТРЕНИРОВКУ</string>
+    <string name="have_training">Тренировались сегодня?</string>
+</resources>
