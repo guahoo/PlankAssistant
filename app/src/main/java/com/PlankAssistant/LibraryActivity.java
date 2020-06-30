@@ -14,9 +14,9 @@ import java.util.HashMap;
 
 
 public class LibraryActivity extends AppCompatActivity {
-     ListView lv;
-     TinyDb tinyDb;
-     ListViewAdapter adapter;
+    ListView lv;
+    TinyDb tinyDb;
+    ListViewAdapter adapter;
     static HashMap<String, ArrayList<String>> mappy = new HashMap<>();
     TextView emptyList;
 

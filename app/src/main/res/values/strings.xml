@@ -10,4 +10,5 @@
     <string name="today">Сегодня: %s</string>
     <string name="treningtimenotification">НАПОМИНАЮ ПРО ТРЕНИРОВКУ</string>
     <string name="have_training">Тренировались сегодня?</string>
+    <string name="results_title">Ваши результаты</string>
 </resources>

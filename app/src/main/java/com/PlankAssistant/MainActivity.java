@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.rxtimertest.R;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -144,7 +145,8 @@ public class MainActivity extends AppCompatActivity {
             e.apply();
         }
 
-        sPrefs.edit().putString(TRAININGDATE,currentDate()).apply();
+        //sPrefs.edit().putString(TRAININGDATE,currentDate()).apply();
+
 
 
         startPlankButton.setOnClickListener(v -> {
@@ -209,6 +211,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void startMainTimer() {
         progressingPlankTime();
+
+
 
         isTimerRunning = true;
         startPlankButton.setImageResource(R.drawable.ic_stopwatchbuttonstatepause);
@@ -310,18 +314,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void renewAdditionalTimeTexView(){
-        boolean sameDate = !currentDate().equals(sPrefs.getString(TRAININGDATE, null));
+        if(!currentDate().equals(sPrefs.getString(TRAININGDATE, null))) {
 
-        String todayTiming= timeLeftFormattedMinutesSeconds(sameDate ? sPrefs.getLong(BEGINNINGTIME, 0) +
-                sPrefs.getLong(ADDITIONALTIME, 0) : sPrefs.getLong(BEGINNINGTIME, 0), TIMEPATTERN);
-
-        String tomorrowTiming = timeLeftFormattedMinutesSeconds(sPrefs.getLong(BEGINNINGTIME, 0) +
-                (sameDate ? sPrefs.getLong(ADDITIONALTIME, 0) * 2 : sPrefs.getLong(ADDITIONALTIME, 0)), TIMEPATTERN);
-
-        todayTime.setText(String.format(getString(R.string.today),todayTiming));
-        tommorowTime.setText(String.format(getString(R.string.tommorow),tomorrowTiming));
-
-
+            todayTime.setText(String.format(getString(R.string.today), timeLeftFormattedMinutesSeconds(sPrefs.getLong(BEGINNINGTIME, 0) +
+                    sPrefs.getLong(ADDITIONALTIME, 0), TIMEPATTERN)));
+            tommorowTime.setText(String.format(getString(R.string.tommorow), timeLeftFormattedMinutesSeconds(sPrefs.getLong(BEGINNINGTIME, 0) +
+                    sPrefs.getLong(ADDITIONALTIME, 0)*2, TIMEPATTERN)));
+        }else {
+            todayTime.setText(String.format(getString(R.string.today), timeLeftFormattedMinutesSeconds(sPrefs.getLong(BEGINNINGTIME, 0), TIMEPATTERN)));
+            tommorowTime.setText(String.format(getString(R.string.tommorow), timeLeftFormattedMinutesSeconds(sPrefs.getLong(BEGINNINGTIME, 0) +
+                    sPrefs.getLong(ADDITIONALTIME, 0), TIMEPATTERN)));
+        }
 
     }
 
