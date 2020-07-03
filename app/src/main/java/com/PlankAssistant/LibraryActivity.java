@@ -10,23 +10,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.rxtimertest.R;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 
 public class LibraryActivity extends AppCompatActivity {
     ListView lv;
     TinyDb tinyDb;
     ListViewAdapter adapter;
-    static HashMap<String, ArrayList<String>> mappy = new HashMap<>();
+   // static TreeMap<String, ArrayList<String>> mappy = new HashMap<>();
     TextView emptyList;
 
-    public void initialListViewMap() {
-        mappy = new HashMap<>();
-        for (int i = 0; i < tinyDb.getAll().size(); i++) {
-            String id = String.valueOf(i);
-            mappy.put(id, tinyDb.getListString(id));
-        }
-    }
+
+
 
 //    private void onSwipeEvent(int position) {
 //
@@ -44,9 +39,9 @@ public class LibraryActivity extends AppCompatActivity {
         lv = findViewById(R.id.lv);
         emptyList = findViewById(R.id.emptyView);
 
-        initialListViewMap();
 
-        adapter = new ListViewAdapter(mappy, this.getApplicationContext());
+
+        adapter = new ListViewAdapter(mappy(), this.getApplicationContext());
         lv.setAdapter(adapter);
 
 
@@ -68,6 +63,16 @@ public class LibraryActivity extends AppCompatActivity {
 //                true); // example : right action without dismiss animation
 
 
+    }
+    public LinkedHashMap<String,ArrayList<String>> mappy() {
+
+
+        LinkedHashMap <String,ArrayList<String>> mappy = new LinkedHashMap<>();
+        for (int i = 0; i < tinyDb.getAll().size(); i++) {
+            String id = String.valueOf(i);
+            mappy.put(id, tinyDb.getListString(id));
+        }
+        return mappy;
     }
 
 //    public static void showWork(HashMap<String, ArrayList<String>> notes) {

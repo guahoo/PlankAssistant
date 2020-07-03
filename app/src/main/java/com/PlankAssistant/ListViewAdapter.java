@@ -22,7 +22,7 @@ public class ListViewAdapter extends BaseAdapter {
 
 
 
-    ListViewAdapter(HashMap<String, ArrayList<String>> map, Context context) {
+    ListViewAdapter(Map<String, ArrayList<String>> map, Context context) {
         mData = new ArrayList<>();
         mData.addAll(map.entrySet());
         this.context = context;
@@ -68,7 +68,7 @@ public class ListViewAdapter extends BaseAdapter {
             ((TextView) result.findViewById(R.id.colDate)).setText(item.getValue().get(0));
             ((TextView) result.findViewById(R.id.colTimeResult)).setText(item.getValue().get(1));
 
-            if (!item.getValue().get(1).equals(item.getValue().get(2))){
+            if ((!item.getValue().get(1).equals(item.getValue().get(2)))||(item.getValue().get(1).equals("00:00"))){
                 ((TextView) result.findViewById(R.id.colTimeResult)).
                         setTextColor(ContextCompat.getColor(context,R.color.colorFire));
             }
