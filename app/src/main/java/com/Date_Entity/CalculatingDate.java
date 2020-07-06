@@ -9,27 +9,17 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 public class CalculatingDate {
 
-    SimpleDateFormat myFormat = new SimpleDateFormat("dd MM yyyy", Locale.getDefault());
-    String savedDate;
-    Date endDate;
-
+    private SimpleDateFormat myFormat = new SimpleDateFormat("dd MM yyyy", Locale.getDefault());
 
 
     public CalculatingDate() {
 
     }
 
-    {
-        try {
-            endDate = Objects.requireNonNull(myFormat).parse(currentDate());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-    }
+
 
 
     public String currentDate() {
