@@ -14,15 +14,11 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.Date_Entity.CalculatingDate;
 import com.example.rxtimertest.R;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -64,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     EraserDialog eraserdialog;
     CountDownTimer countDownTimer;
     NotifyTimerChooseDialog notifyTimerChooseDialog;
+    CalculatingDate calculatingDate;
 
     private @NonNull Disposable observable;
 
@@ -73,14 +70,9 @@ public class MainActivity extends AppCompatActivity {
     int countTimer;
     long timeout;
     boolean firstTime;
-    long diff;
+    //long diff;
     int id;
-    SimpleDateFormat myFormat = new SimpleDateFormat("dd MM yyyy", Locale.getDefault());
 
-
-    String currentDate() {
-        return myFormat.format(new Date());
-    }
 
 
     @Override
@@ -110,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
         info_dialog = new Info_dialog(this);
         eraserdialog = new EraserDialog(this);
         notifyTimerChooseDialog = new NotifyTimerChooseDialog(this);
+        calculatingDate = new CalculatingDate();
 
         tinyDb = new TinyDb(this.getApplicationContext());
         mainLayout = findViewById(R.id.mainLayout);
@@ -130,7 +123,12 @@ public class MainActivity extends AppCompatActivity {
 
         trainingDayCount = sPrefs.getInt(TRAININGDAY, 0);
 
-        calculateProgrammDays();
+
+        try {
+            getProgrammDate();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         id = trainingDayCount() == 0 ? trainingDayCount() + 1 : trainingDayCount();
 
@@ -159,53 +157,51 @@ public class MainActivity extends AppCompatActivity {
         if (sPrefs.getInt(TRAININGDAY, 0) == 0 & firstTime) {
             dialog_timer_choose.showMenuDialog();
 
-            putResult(String.valueOf(id),date_time_list(currentDate()));
+            putResult(String.valueOf(id),date_time_list(calculatingDate.currentDate()));
             SharedPreferences.Editor e = sPrefs.edit();
             e.putBoolean(FIRSTTIME, false);
-            e.putString(TRAININGDATE, currentDate());
+            e.putString(TRAININGDATE, calculatingDate.currentDate());
             e.putLong(NOTIFY_TIME, 0);
             e.putBoolean(HAVE_TRAINING_ALREADY, false);
             e.apply();
         }
     }
 
-    private void calculateProgrammDays() {
+    private void getProgrammDate() throws ParseException {
 
-        try {
-            Date date1 = myFormat.parse(Objects.requireNonNull(sPrefs.getString(TRAININGDATE, null)));
-            Date date2 = myFormat.parse(currentDate());
-            if (date1 != null) {
-                if (date2 != null) {
-                    diff = date2.getTime() - date1.getTime();
-                }
-            }
-
-
-            for (int i = sPrefs.getInt(TRAININGDAY, 0)+1; i <= TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS); i++) {
-                putResult(String.valueOf(i), date_time_list(getDaysBetweenDates(date1, date2).get(i)));
+//        try {
+//            Date date1 = myFormat.parse(Objects.requireNonNull(sPrefs.getString(TRAININGDATE, null)));
+//            Date date2 = myFormat.parse(currentDate());
+//            if (date1 != null) {
+//                if (date2 != null) {
+//                    diff = date2.getTime() - date1.getTime();
+//                }
+//            }
+             long diff = calculatingDate.calculatingDateDifferense(sPrefs.getString(TRAININGDATE, null));
+             for (int i = sPrefs.getInt(TRAININGDAY, 0)+1; i <= TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS); i++) {
+                putResult(String.valueOf(i), date_time_list(calculatingDate.getDaysBetweenDates(Objects.requireNonNull(sPrefs.getString(TRAININGDATE, null))).get(i)));
+                //todo:исправить тут
             }
             trainingDayCount = tinyDb.getAll().size();
-        } catch (ParseException e) {
-            e.printStackTrace();
         }
-    }
 
-    public List<String> getDaysBetweenDates(Date startdate, Date enddate) {
-        List<String> dates = new ArrayList<>();
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTime(startdate);
 
-        while (calendar.getTime().before(enddate)) {
-            String result = myFormat.format(calendar.getTime());
-            dates.add(result);
-            calendar.add(Calendar.DATE, 1);
-        }
-        dates.add(currentDate());
-        return dates;
-    }
+//    public List<String> getDaysBetweenDates(Date startdate, Date enddate) {
+//        List<String> dates = new ArrayList<>();
+//        Calendar calendar = new GregorianCalendar();
+//        calendar.setTime(startdate);
+//
+//        while (calendar.getTime().before(enddate)) {
+//            String result = myFormat.format(calendar.getTime());
+//            dates.add(result);
+//            calendar.add(Calendar.DATE, 1);
+//        }
+//        dates.add(currentDate());
+//        return dates;
+//    }
 
     private void progressingPlankTime() {
-        if (!currentDate().equals(sPrefs.getString(TRAININGDATE, null)) && haveTrainingAlready) {
+        if (!calculatingDate.currentDate().equals(sPrefs.getString(TRAININGDATE, null)) && haveTrainingAlready) {
             additionalTime = sPrefs.getLong(ADDITIONALTIME, 0);
             SharedPreferences.Editor e = sPrefs.edit();
             e.putLong(BEGINNINGTIME, sPrefs.getLong(BEGINNINGTIME, 0) + additionalTime);
@@ -255,7 +251,7 @@ public class MainActivity extends AppCompatActivity {
         minuteProgress.setProgress(0);
         countTimer = 0;
         SharedPreferences.Editor e = sPrefs.edit();
-        e.putString(TRAININGDATE, currentDate());
+        e.putString(TRAININGDATE, calculatingDate.currentDate());
         e.putInt(TRAININGDAY, trainingDayCount());
         e.putBoolean(HAVE_TRAINING_ALREADY, true);
         e.apply();
@@ -266,7 +262,7 @@ public class MainActivity extends AppCompatActivity {
         isTimerRunning = false;
         startPlankButton.setImageResource(R.drawable.button_states);
         observable.dispose();
-        putResult(String.valueOf(id - 1), date_time_list(currentDate()));
+        putResult(String.valueOf(id - 1), date_time_list(calculatingDate.currentDate()));
 
 
         if (!timerTextView.getText().toString().equals(timeLeftFormattedMinutesSeconds(timeout, TIMEPATTERN))) {
@@ -326,7 +322,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void renewAdditionalTimeTexView() {
-        if (!currentDate().equals(sPrefs.getString(TRAININGDATE, null)) & haveTrainingAlready) {
+        if (!calculatingDate.currentDate().equals(sPrefs.getString(TRAININGDATE, null)) & haveTrainingAlready) {
 
             todayTime.setText(String.format(getString(R.string.today), timeLeftFormattedMinutesSeconds(sPrefs.getLong(BEGINNINGTIME, 0) +
                     sPrefs.getLong(ADDITIONALTIME, 0), TIMEPATTERN)));

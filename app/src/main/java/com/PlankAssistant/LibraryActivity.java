@@ -17,7 +17,6 @@ public class LibraryActivity extends AppCompatActivity {
     ListView lv;
     TinyDb tinyDb;
     ListViewAdapter adapter;
-   // static TreeMap<String, ArrayList<String>> mappy = new HashMap<>();
     TextView emptyList;
 
 
