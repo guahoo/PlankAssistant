@@ -11,6 +11,7 @@ public class EraserDialog extends CreateDialog {
     private TextView messageTextView;
 
 
+    @Override
     public void showInfoDialog(String message) {
         init();
         messageTextView.setText(message);
@@ -18,7 +19,8 @@ public class EraserDialog extends CreateDialog {
     }
 
     EraserDialog(Context context){
-        this.context = context;
+        super(context);
+
     }
 
 

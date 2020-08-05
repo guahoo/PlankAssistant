@@ -24,7 +24,7 @@ public class NotifyTimerChooseDialog extends CreateDialog{
     private SharedPreferences sPrefs;
 
     NotifyTimerChooseDialog(Context context) {
-        this.context = context;
+        super(context);
         sharedPreferencesOperations = new SharedPreferencesOperations(context);
         sPrefs = context.getSharedPreferences(MainActivity.PREFERENCES,Context.MODE_PRIVATE);
     }

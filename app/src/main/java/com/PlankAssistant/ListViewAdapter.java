@@ -10,41 +10,32 @@ import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 
 import com.example.rxtimertest.R;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 
 public class ListViewAdapter extends BaseAdapter {
-    private final ArrayList<Map.Entry<String, ArrayList<String>>> mData;
     private Context context;
+    private List<List<String>> fromLibraryActivity;
 
 
-
-    ListViewAdapter(Map<String, ArrayList<String>> map, Context context) {
-        mData = new ArrayList<>();
-        mData.addAll(map.entrySet());
+    ListViewAdapter(List<List<String>> tempArray, Context context) {
+        fromLibraryActivity = tempArray;
         this.context = context;
-
     }
 
 
     @Override
     public int getCount() {
-
-        return mData.size();
-
+        return fromLibraryActivity.size();
     }
 
     @Override
-    public Map.Entry<String, ArrayList<String>> getItem(int position) {
-        return mData.get(position);
+    public List<String> getItem(int position) {
+        return fromLibraryActivity.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-
         return 0;
     }
 
@@ -60,22 +51,22 @@ public class ListViewAdapter extends BaseAdapter {
             result = convertView;
         }
 
-        Map.Entry<String, ArrayList<String>> item = getItem(position);
+        List<String> item = getItem(position);
 
         try {
 
-            ((TextView) result.findViewById(R.id.colTrainingDay)).setText(String.format(context.getString(R.string.DayString), Integer.parseInt(item.getKey()) + 1));
-            ((TextView) result.findViewById(R.id.colDate)).setText(item.getValue().get(0));
-            ((TextView) result.findViewById(R.id.colTimeResult)).setText(item.getValue().get(1));
+            ((TextView) result.findViewById(R.id.colTrainingDay)).setText(String.valueOf(position+1));
+            ((TextView) result.findViewById(R.id.colDate)).setText(item.get(0));
+            ((TextView) result.findViewById(R.id.colTimeResult)).setText(item.get(1));
 
-            if ((!item.getValue().get(1).equals(item.getValue().get(2)))||(item.getValue().get(1).equals("00:00"))){
+            if ((!item.get(1).equals(item.get(2)))||(item.get(1).equals("00:00"))){
                 ((TextView) result.findViewById(R.id.colTimeResult)).
                         setTextColor(ContextCompat.getColor(context,R.color.colorFire));
             }
 
 
 
-        } catch (IndexOutOfBoundsException aie) {
+        } catch (Exception aie) {
             ((TextView) result.findViewById(R.id.colTimeResult)).setText(R.string.Error);
         }
         return result;

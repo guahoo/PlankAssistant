@@ -23,6 +23,7 @@ public class CalculatingDate {
 
 
     public String currentDate() {
+
         return myFormat.format(new Date());
     }
 

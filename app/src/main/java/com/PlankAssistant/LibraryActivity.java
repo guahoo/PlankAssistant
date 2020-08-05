@@ -4,13 +4,10 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.rxtimertest.R;
-
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.List;
 
 
 public class LibraryActivity extends AppCompatActivity {
@@ -19,32 +16,32 @@ public class LibraryActivity extends AppCompatActivity {
     ListViewAdapter adapter;
     TextView emptyList;
 
-
-
-
-//    private void onSwipeEvent(int position) {
-//
-//    }
-
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-        tinyDb = new TinyDb(this.getApplicationContext());
-
+        tinyDb = new TinyDb(getApplicationContext());
         setContentView(R.layout.activity_library);
         lv = findViewById(R.id.lv);
         emptyList = findViewById(R.id.emptyView);
-
-
-
-        adapter = new ListViewAdapter(mappy(), this.getApplicationContext());
+        adapter = new ListViewAdapter(tinyDbArray(), this.getApplicationContext());
         lv.setAdapter(adapter);
-
-
         lv.setEmptyView(emptyList);
+    }
+
+    public List<List<String>> tinyDbArray() {
+        List<List<String>> tinyDbArray = new ArrayList<>();
+
+
+        for (int i = 0; i < tinyDb.getAll().size(); i++) {
+            tinyDbArray.add(tinyDb.getListString(String.valueOf(i)));
+        }
+        return tinyDbArray;
+    }
+
+
+
+
 //
 //        OnSwipeTouchListener touchListener = new OnSwipeTouchListener(lv,
 //                new OnSwipeTouchListener.OnSwipeCallback() {
@@ -62,22 +59,12 @@ public class LibraryActivity extends AppCompatActivity {
 //                true); // example : right action without dismiss animation
 
 
-    }
-    public LinkedHashMap<String,ArrayList<String>> mappy() {
 
 
-        LinkedHashMap <String,ArrayList<String>> mappy = new LinkedHashMap<>();
-        for (int i = 0; i < tinyDb.getAll().size(); i++) {
-            String id = String.valueOf(i);
-            mappy.put(id, tinyDb.getListString(id));
-        }
-        return mappy;
-    }
 
-//    public static void showWork(HashMap<String, ArrayList<String>> notes) {
-//            adapter = new ListViewAdapter(notes);
-//            lv.setAdapter(adapter);
-//    }
+
+
+
 
 //    static HashMap<String, ArrayList<String>> notesMap() {
 //        HashMap<String, ArrayList<String>> mappy = new HashMap<>();

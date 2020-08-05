@@ -19,19 +19,19 @@ class Dialog_Timer_Choose extends CreateDialog{
 
 
     Dialog_Timer_Choose(Context context) {
-        this.context = context;
+        super(context);
+
         sharedPreferensessOperations = new SharedPreferencesOperations(context);
         sPrefs = context.getSharedPreferences(PREFERENCES,Context.MODE_PRIVATE);
     }
 
-    void showMenuDialog() {
-        init();
-        d.show();
-    }
+
 
 
     @Override
     public void showInfoDialog(String message) {
+        init();
+        d.show();
 
     }
 
@@ -44,14 +44,14 @@ class Dialog_Timer_Choose extends CreateDialog{
 
         ImageButton ok_Btn = d.findViewById(R.id.ok_Btn);
 
-        int[] numberpickerids = {
-                R.id.numberPicker,
-                R.id.numberPicker2,
-                R.id.numberPicker3,
-                R.id.numberPicker4
-        };
-
-        for (int i : numberpickerids) initNumberPicker(i);
+//        int[] numberpickerids = {
+//                R.id.numberPicker,
+//                R.id.numberPicker2,
+//                R.id.numberPicker3,
+//                R.id.numberPicker4
+//        };
+//
+//        for (int i : numberpickerids) initNumberPicker(i);
 
         long mBaseTime = sPrefs.getLong(BEGINNINGTIME,0);
         long mAdditionalTime = sPrefs.getLong(ADDITIONALTIME,0);
@@ -82,6 +82,7 @@ class Dialog_Timer_Choose extends CreateDialog{
         NumberPicker np = d.findViewById(id);
         np.setMinValue(0);
         np.setMaxValue(59);
+
         np.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
         return np;
     }

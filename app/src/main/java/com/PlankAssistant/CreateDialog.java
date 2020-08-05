@@ -13,7 +13,8 @@ abstract class CreateDialog {
     Dialog d;
     Context context;
 
-    CreateDialog(){
+    CreateDialog(Context context){
+        this.context=context;
 
     }
 
