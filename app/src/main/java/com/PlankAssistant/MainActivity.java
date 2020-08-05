@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -45,8 +46,6 @@ public class MainActivity extends AppCompatActivity {
     private static final String FIRSTTIME = "firstTime";
     private static final String HAVE_TRAINING_ALREADY = "HAVE_TRAINING_ALREADY";
     private boolean haveTrainingAlready;
-
-
     TextView timerTextView, millisecondsTextView, currentTrainingDay, beforeStartingCount, tommorowTime, todayTime;
     ImageButton startPlankButton;
     ProgressBar minuteProgress;
@@ -61,16 +60,13 @@ public class MainActivity extends AppCompatActivity {
     CountDownTimer countDownTimer;
     NotifyTimerChooseDialog notifyTimerChooseDialog;
     CalculatingDate calculatingDate;
-
     private @NonNull Disposable observable;
-
     private boolean isTimerRunning;
     int trainingDayCount;
     long additionalTime;
     int countTimer;
     long timeout;
     boolean firstTime;
-    //long diff;
     int id;
 
 
@@ -108,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
         mainLayout = findViewById(R.id.mainLayout);
         haveTrainingAlready = sPrefs.getBoolean(HAVE_TRAINING_ALREADY, false);
 
-        settingsButton.setOnClickListener(v -> dialog_timer_choose.showMenuDialog());
+        settingsButton.setOnClickListener(v -> dialog_timer_choose.showInfoDialog(null));
 
 
         resetButton.setOnClickListener(v -> eraserdialog.showInfoDialog("СБРОСИТЬ ВСЕ?"));
@@ -121,7 +117,12 @@ public class MainActivity extends AppCompatActivity {
         createsPrefsModel();
 
 
+        sayHello("Hello");
+
+
         trainingDayCount = sPrefs.getInt(TRAININGDAY, 0);
+
+
 
 
         try {
@@ -130,7 +131,8 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        id = trainingDayCount() == 0 ? trainingDayCount() + 1 : trainingDayCount();
+        id = trainingDayCount() == 0 ? trainingDayCount() + 1 : trainingDayCount()-1;
+        Toast.makeText(this,String.valueOf(id),Toast.LENGTH_LONG).show();
 
 
 
@@ -144,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        currentTrainingDay.setText(String.format(TRAININGDAYSTRING, id));
+        currentTrainingDay.setText(String.format(TRAININGDAYSTRING, id+1));
 
         renewAdditionalTimeTexView();
 
@@ -155,9 +157,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void createsPrefsModel() {
         if (sPrefs.getInt(TRAININGDAY, 0) == 0 & firstTime) {
-            dialog_timer_choose.showMenuDialog();
+            dialog_timer_choose.showInfoDialog(null);
 
-            putResult(String.valueOf(id),date_time_list(calculatingDate.currentDate()));
+
+            //putResult(String.valueOf(id-1),date_time_list(calculatingDate.currentDate()));
             SharedPreferences.Editor e = sPrefs.edit();
             e.putBoolean(FIRSTTIME, false);
             e.putString(TRAININGDATE, calculatingDate.currentDate());
@@ -167,38 +170,25 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void sayHello (String hello){
+        Toast.makeText(this,hello,Toast.LENGTH_LONG).show();
+
+    }
+
     private void getProgrammDate() throws ParseException {
 
-//        try {
-//            Date date1 = myFormat.parse(Objects.requireNonNull(sPrefs.getString(TRAININGDATE, null)));
-//            Date date2 = myFormat.parse(currentDate());
-//            if (date1 != null) {
-//                if (date2 != null) {
-//                    diff = date2.getTime() - date1.getTime();
-//                }
-//            }
+
              long diff = calculatingDate.calculatingDateDifferense(sPrefs.getString(TRAININGDATE, null));
-             for (int i = sPrefs.getInt(TRAININGDAY, 0)+1; i <= TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS); i++) {
+             for (int i = sPrefs.getInt(TRAININGDAY, 0); i <= TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS); i++) {
                 putResult(String.valueOf(i), date_time_list(calculatingDate.getDaysBetweenDates(Objects.requireNonNull(sPrefs.getString(TRAININGDATE, null))).get(i)));
-                //todo:исправить тут
             }
+
             trainingDayCount = tinyDb.getAll().size();
+            saveToSprefs(TRAININGDAY, trainingDayCount());
         }
 
 
-//    public List<String> getDaysBetweenDates(Date startdate, Date enddate) {
-//        List<String> dates = new ArrayList<>();
-//        Calendar calendar = new GregorianCalendar();
-//        calendar.setTime(startdate);
-//
-//        while (calendar.getTime().before(enddate)) {
-//            String result = myFormat.format(calendar.getTime());
-//            dates.add(result);
-//            calendar.add(Calendar.DATE, 1);
-//        }
-//        dates.add(currentDate());
-//        return dates;
-//    }
+
 
     private void progressingPlankTime() {
         if (!calculatingDate.currentDate().equals(sPrefs.getString(TRAININGDATE, null)) && haveTrainingAlready) {
@@ -219,8 +209,9 @@ public class MainActivity extends AppCompatActivity {
     void resetAll() {
         SharedPreferences.Editor e = sPrefs.edit();
         e.clear().apply();
-        tinyDb.clear();
+
         startActivity(new Intent(this, MainActivity.class));
+        tinyDb.clear();
     }
 
     private void initialPreTimer() {
@@ -252,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
         countTimer = 0;
         SharedPreferences.Editor e = sPrefs.edit();
         e.putString(TRAININGDATE, calculatingDate.currentDate());
-        e.putInt(TRAININGDAY, trainingDayCount());
+        saveToSprefs(TRAININGDAY, trainingDayCount());
         e.putBoolean(HAVE_TRAINING_ALREADY, true);
         e.apply();
     }
@@ -262,7 +253,8 @@ public class MainActivity extends AppCompatActivity {
         isTimerRunning = false;
         startPlankButton.setImageResource(R.drawable.button_states);
         observable.dispose();
-        putResult(String.valueOf(id - 1), date_time_list(calculatingDate.currentDate()));
+        putResult(String.valueOf(id), date_time_list(calculatingDate.currentDate()));
+        saveToSprefs(TRAININGDAY, trainingDayCount());
 
 
         if (!timerTextView.getText().toString().equals(timeLeftFormattedMinutesSeconds(timeout, TIMEPATTERN))) {
@@ -273,14 +265,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showInfo(String result) {
-
         info_dialog.showInfoDialog(result);
     }
 
     public String timeLeftFormattedMinutesSeconds(long mtimeleftminutes, String pattern) {
         int minutes = (int) mtimeleftminutes / 1000 / 60;
         int seconds = (int) mtimeleftminutes / 1000 % 60;
-        // int milliseconds = (int) mtimeleftminutes % 1000;
         return String.format(Locale.getDefault(), pattern,
                 minutes, seconds);
     }
@@ -299,6 +289,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+
 
     private void makeProgress() {
         countTimer += 1;
@@ -348,6 +340,14 @@ public class MainActivity extends AppCompatActivity {
         date_time_list.add(timeLeftFormattedMinutesSeconds(timeout, TIMEPATTERN));
 
         return date_time_list;
+    }
+
+
+    void saveToSprefs(String place,int value){
+        SharedPreferences.Editor editor = sPrefs.edit();
+        editor.putInt(place, value);
+        editor.apply();
+
     }
 
 

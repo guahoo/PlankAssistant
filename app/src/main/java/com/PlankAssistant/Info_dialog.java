@@ -12,7 +12,8 @@ class Info_dialog extends CreateDialog{
 
 
     Info_dialog(Context context){
-        this.context = context;
+        super(context);
+
     }
 
 
